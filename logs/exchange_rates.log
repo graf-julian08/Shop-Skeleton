@@ -1,0 +1,28 @@
+[2026-01-13 09:55:30] === Exchange Rate Cron Job Started ===
+[2026-01-13 09:55:30] Shop ID: 1, Force: No
+[2026-01-13 09:55:31] Rate limit active: Last update was 27 minutes ago. Next update in 33 minutes.
+[2026-01-13 09:55:31] Use --force to override rate limit.
+[2026-01-13 09:55:41] === Exchange Rate Cron Job Started ===
+[2026-01-13 09:55:41] Shop ID: 1, Force: Yes
+[2026-01-13 09:55:41] Base currency: USD
+[2026-01-13 09:55:41] Active currencies to update: 135
+[2026-01-13 09:55:41] Fetching from: https://open.er-api.com/v6/latest/USD
+[2026-01-13 09:55:41] API returned 166 currencies
+[2026-01-13 09:55:41] SUCCESS: Updated 133 currencies, skipped 2 (not in API)
+[2026-01-13 09:55:41] === Exchange Rate Cron Job Completed ===
+[2026-01-13 10:14:35] === Exchange Rate Cron Job Started ===
+[2026-01-13 10:14:35] Shop ID: 1, Force: Yes
+[2026-01-13 10:14:35] Base currency: USD
+[2026-01-13 10:14:35] Active currencies to update: 135
+[2026-01-13 10:14:35] Fetching from: https://open.er-api.com/v6/latest/USD
+[2026-01-13 10:14:35] API returned 166 currencies
+[2026-01-13 10:14:35] SUCCESS: Updated 133 currencies, skipped 2 (not in API)
+[2026-01-13 10:14:35] === Exchange Rate Cron Job Completed ===
+[2026-01-13 10:14:53] === Exchange Rate Cron Job Started ===
+[2026-01-13 10:14:53] Shop ID: 1, Force: Yes
+[2026-01-13 10:14:53] Base currency: USD
+[2026-01-13 10:14:53] Active currencies to update: 135
+[2026-01-13 10:14:53] Fetching from: https://open.er-api.com/v6/latest/USD
+[2026-01-13 10:14:53] API returned 166 currencies
+[2026-01-13 10:14:53] SUCCESS: Updated 133 currencies, skipped 2 (not in API)
+[2026-01-13 10:14:53] === Exchange Rate Cron Job Completed ===

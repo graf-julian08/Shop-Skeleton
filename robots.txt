@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /warenkorb/
+Disallow: /checkout/
+Disallow: /konto/
+Disallow: /suche/
+
+# Sitemaps
+Sitemap: https://localhost:8085/sitemap.xml

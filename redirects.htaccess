@@ -1,0 +1,15 @@
+# =============================================
+# AUTO-GENERATED REDIRECTS - DO NOT EDIT MANUALLY
+# Generated: 2026-01-13 16:11:23
+# =============================================
+
+RewriteEngine On
+
+# Redirect: /test-source -> /test-target
+RewriteRule ^test\-source$ /test-target [R=301,L]
+
+# Redirect: /test-page -> /admin/
+RewriteRule ^test\-page$ /admin/ [R=301,L]
+
+# Redirect: /hallo/bye -> /gruen
+RewriteRule ^hallo/bye$ /gruen [R=301,L]

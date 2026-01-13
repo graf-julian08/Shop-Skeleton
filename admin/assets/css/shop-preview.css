@@ -1,0 +1,407 @@
+/* Shop Preview Styles - Data Driven */
+:root {
+    /* Fallbacks if PHP injection fails */
+    --mega-bg: #ffffff;
+    --mega-text: #333333;
+    --mega-radius: 0px;
+    --mega-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+    --header-speed: 200ms;
+    --header-delay: 100ms;
+
+    --primary-color: #000000;
+    --text-color: #333333;
+    --border-color: #e5e7eb;
+    --bg-color: #ffffff;
+    --header-height: 80px;
+}
+
+/* Global Box Sizing */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f9fafb;
+    color: var(--text-color);
+}
+
+ul,
+ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Mock Header */
+.shop-header {
+    background: #fff;
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+    position: relative;
+    z-index: 100;
+}
+
+.shop-logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-color);
+    letter-spacing: -0.5px;
+}
+
+.shop-nav {
+    display: flex;
+    gap: 32px;
+    height: 100%;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: 15px;
+    position: relative;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    color: var(--primary-color);
+}
+
+/* Header Links Mode: Underline */
+body.mode-header-links .nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary-color);
+}
+
+/* Mega Menu Overlay */
+.mega-menu-overlay {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--mega-bg);
+    color: var(--mega-text);
+    border-top: 1px solid var(--border-color);
+    box-shadow: var(--mega-shadow);
+    border-radius: 0 0 var(--mega-radius) var(--mega-radius);
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all var(--header-speed) ease;
+    transition-delay: var(--header-delay);
+    z-index: 90;
+    /* Height is dynamic or fixed for preview */
+    min-height: 300px;
+}
+
+/* Mega Menu Canvas */
+.mega-canvas {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    max-width: 1400px;
+    /* Container width */
+}
+
+/* Elements */
+.mega-element {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.mega-element img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.mega-element-text {
+    width: 100%;
+}
+
+.mega-link-group h4 {
+    margin: 0 0 12px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.mega-link-group li {
+    margin-bottom: 8px;
+}
+
+.mega-link-group a {
+    color: inherit;
+    opacity: 0.7;
+    font-size: 14px;
+    transition: opacity 0.2s;
+}
+
+.mega-link-group a:hover {
+    opacity: 1;
+}
+
+/* 
+   INTERACTION STYLES 
+   Dependent on body.trigger-* and body.mode-*
+*/
+
+/* 1. Header Links Mode (Desktop) */
+@media (min-width: 1025px) {
+
+    /* Trigger: Hover */
+    body.mode-header-links.trigger-hover .nav-item:hover .mega-menu-overlay {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    /* Trigger: Click (handled via JS adding .open class) */
+    body.mode-header-links .nav-item.open .mega-menu-overlay {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    /* Hide Mobile Toggle in Header Mode */
+    body.mode-header-links .mobile-toggle {
+        display: none;
+    }
+}
+
+/* 2. Side Menu Mode (Desktop & Mobile) OR Mobile View of Header Mode */
+/* Shared Logic for Mobile Drawer AND Side Menu Mode */
+
+/* Mobile Toggle - Visible on Mobile OR Always in Side Menu Mode */
+.mobile-toggle {
+    display: none;
+    /* Default hidden */
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+}
+
+@media (max-width: 1024px) {
+    .mobile-toggle {
+        display: block;
+    }
+}
+
+body.mode-side-menu .mobile-toggle {
+    display: block;
+    /* Always show in Side Menu mode */
+}
+
+/* Side Menu / Mobile Drawer Styles */
+.shop-nav.mobile-open {
+    transform: translateX(0) !important;
+}
+
+/* Shared Logic for Mobile Drawer AND Side Menu Mode (Desktop) */
+body.mode-side-menu .shop-nav,
+@media (max-width: 1024px) {
+    .shop-nav {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        max-width: 400px;
+        /* Drawer width */
+        height: 100vh;
+        background: #fff;
+        flex-direction: column;
+        padding-top: 80px;
+        /* Space for close button */
+        border-right: 1px solid var(--border-color);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 200;
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Hamburger Animation Styles */
+    .hamburger-icon.animated {
+        width: 30px;
+        height: 24px;
+        position: relative;
+        transform: rotate(0deg);
+        transition: .5s ease-in-out;
+        cursor: pointer;
+    }
+
+    .hamburger-icon.animated span {
+        display: block;
+        position: absolute;
+        height: 2px;
+        width: 100%;
+        background: var(--text-color);
+        border-radius: 2px;
+        opacity: 1;
+        left: 0;
+        transform: rotate(0deg);
+        transition: .25s ease-in-out;
+    }
+
+    .hamburger-icon.animated span:nth-child(1) {
+        top: 0px;
+    }
+
+    .hamburger-icon.animated span:nth-child(2) {
+        top: 10px;
+    }
+
+    .hamburger-icon.animated span:nth-child(3) {
+        top: 20px;
+    }
+
+    .hamburger-icon.animated.open span:nth-child(1) {
+        top: 10px;
+        transform: rotate(135deg);
+    }
+
+    .hamburger-icon.animated.open span:nth-child(2) {
+        opacity: 0;
+        left: -60px;
+    }
+
+    .hamburger-icon.animated.open span:nth-child(3) {
+        top: 10px;
+        transform: rotate(-135deg);
+    }
+}
+
+/* Let's be specific to avoid conflicts */
+
+/* CASE A: Header Mode - Mobile Drawer (Max Width 1024px) */
+@media (max-width: 1024px) {
+    body.mode-header-links .shop-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 300px;
+        background: #fff;
+        flex-direction: column;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        padding-top: 60px;
+        z-index: 200;
+        border-right: 1px solid #eee;
+    }
+
+    body.mode-header-links .nav-item {
+        width: 100%;
+        height: auto;
+        padding: 15px 20px;
+        border-bottom: 1px solid #f5f5f5;
+        justify-content: space-between;
+    }
+
+    body.mode-header-links .mega-menu-overlay {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        border: none;
+        display: none;
+        /* JS toggle needed for sub-items */
+        padding-left: 20px;
+    }
+
+    body.mode-header-links .nav-item.active .mega-menu-overlay {
+        display: block;
+    }
+}
+
+/* CASE B: Side Menu Mode - Always Drawer */
+body.mode-side-menu .shop-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 350px;
+    background: #fff;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    padding-top: 80px;
+    z-index: 200;
+    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.05);
+}
+
+body.mode-side-menu .nav-item {
+    width: 100%;
+    height: auto;
+    padding: 20px 30px;
+    border-bottom: 1px solid #f5f5f5;
+    font-size: 18px;
+}
+
+body.mode-side-menu .nav-item:hover {
+    background: #f9fafb;
+}
+
+/* Side Menu Mega Menu (Desktop) - depends on style (Overlay vs Side-by-Side) */
+/* For now, just render below like mobile for simplicity, or overlay? */
+body.mode-side-menu .mega-menu-overlay {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    display: none;
+    padding: 20px;
+    background: #f9f9f9;
+}
+
+body.mode-side-menu .nav-item.active .mega-menu-overlay {
+    display: block;
+    /* Expand inline */
+}
+
+/* Breakpoint Utilities (Hide Logic) */
+@media (min-width: 1025px) {
+    .hide-desktop {
+        display: none !important;
+    }
+}
+
+@media (max-width: 1024px) and (min-width: 481px) {
+    .hide-tablet {
+        display: none !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .hide-mobile {
+        display: none !important;
+    }
+}
