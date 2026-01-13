@@ -141,36 +141,31 @@
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label">Regel-Typ</label>
-                    <select class="form-select" id="ruleType">
+                    <select class="form-select" id="ruleType" onchange="Personalization.validateRuleTypePosition()">
                         <option value="similar">Ähnliche Produkte</option>
                         <option value="recently_viewed">Kürzlich angesehen</option>
                         <option value="bought_together">Kunden kauften auch</option>
                         <option value="trending">Trending</option>
                         <option value="bestseller">Bestseller</option>
-                        <option value="custom">Benutzerdefiniert</option>
                     </select>
+                    <p class="form-hint" id="ruleTypeHint"></p>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Position</label>
-                    <select class="form-select" id="rulePosition">
+                    <select class="form-select" id="rulePosition" onchange="Personalization.validateRuleTypePosition()">
                         <option value="homepage">Homepage</option>
                         <option value="product_page">Produktseite</option>
                         <option value="cart">Warenkorb</option>
-                        <option value="checkout">Checkout</option>
                         <option value="category">Kategorieseite</option>
                     </select>
+                    <p class="form-hint" id="rulePositionHint"></p>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">Anzahl Produkte</label>
-                    <input type="number" class="form-input" id="ruleProductCount" value="4" min="1" max="20">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Priorität</label>
-                    <input type="number" class="form-input" id="rulePriority" value="0" min="0" max="100">
-                    <p class="form-hint">Niedrigere Werte = höhere Priorität</p>
-                </div>
+            <div class="form-group">
+                <label class="form-label">Anzahl Produkte</label>
+                <input type="number" class="form-input" id="ruleProductCount" value="4" min="1" max="12"
+                    style="max-width:120px;">
+                <p class="form-hint">Wie viele Produkte angezeigt werden (1-12)</p>
             </div>
             <div class="form-group">
                 <label class="form-checkbox">
@@ -365,7 +360,6 @@
             document.getElementById('ruleType').value = 'similar';
             document.getElementById('rulePosition').value = 'product_page';
             document.getElementById('ruleProductCount').value = 4;
-            document.getElementById('rulePriority').value = 0;
             document.getElementById('ruleActive').checked = true;
             document.getElementById('ruleModal').style.display = 'flex';
         },
@@ -383,30 +377,82 @@
                 document.getElementById('ruleType').value = r.rule_type;
                 document.getElementById('rulePosition').value = r.position;
                 document.getElementById('ruleProductCount').value = r.product_count;
-                document.getElementById('rulePriority').value = r.priority;
                 document.getElementById('ruleActive').checked = parseInt(r.is_active) === 1;
                 document.getElementById('ruleModal').style.display = 'flex';
+                this.validateRuleTypePosition();
             }
+        },
+
+        // Validiert Regel-Typ und Position Kombination
+        validateRuleTypePosition() {
+            const ruleType = document.getElementById('ruleType').value;
+            const position = document.getElementById('rulePosition').value;
+            const typeHint = document.getElementById('ruleTypeHint');
+            const posHint = document.getElementById('rulePositionHint');
+            
+            // Reset hints
+            typeHint.textContent = '';
+            typeHint.style.color = '';
+            posHint.textContent = '';
+            posHint.style.color = '';
+            
+            // "Ähnliche Produkte" braucht einen Referenzprodukt - nicht auf Homepage/Kategorie
+            if (ruleType === 'similar') {
+                if (position === 'homepage' || position === 'category') {
+                    posHint.textContent = '⚠️ "Ähnliche Produkte" braucht ein Referenzprodukt - nur auf Produktseite oder Warenkorb sinnvoll';
+                    posHint.style.color = 'var(--warning)';
+                    return false;
+                }
+                typeHint.textContent = 'Zeigt Produkte aus derselben Kategorie';
+            }
+            
+            // "Kürzlich angesehen" Hinweis
+            if (ruleType === 'recently_viewed') {
+                typeHint.textContent = 'Zeigt nur wenn User bereits Produkte angeschaut hat';
+            }
+            
+            // "Kunden kauften auch" nur auf Produktseite/Warenkorb
+            if (ruleType === 'bought_together') {
+                if (position === 'homepage') {
+                    posHint.textContent = '⚠️ "Kunden kauften auch" funktioniert besser auf Produktseite oder Warenkorb';
+                    posHint.style.color = 'var(--warning)';
+                }
+            }
+            
+            return true;
         },
 
         async saveRule() {
             const id = document.getElementById('ruleId').value;
             const name = document.getElementById('ruleName').value.trim();
+            const ruleType = document.getElementById('ruleType').value;
+            const position = document.getElementById('rulePosition').value;
 
             if (!name) {
                 this.showToast('Bitte Name eingeben!', 'error');
                 return;
             }
 
+            // Validiere Typ + Position Kombination
+            if (ruleType === 'similar' && (position === 'homepage' || position === 'category')) {
+                this.showToast('"Ähnliche Produkte" ist auf Homepage/Kategorie nicht möglich!', 'error');
+                return;
+            }
+
+            // Produktanzahl validieren (1-12)
+            let productCount = parseInt(document.getElementById('ruleProductCount').value);
+            if (isNaN(productCount) || productCount < 1) productCount = 1;
+            if (productCount > 12) productCount = 12;
+            document.getElementById('ruleProductCount').value = productCount;
+
             const formData = new FormData();
             formData.append('action', 'save_rule');
             formData.append('shop_id', this.shopId);
             if (id) formData.append('id', id);
             formData.append('name', name);
-            formData.append('rule_type', document.getElementById('ruleType').value);
-            formData.append('position', document.getElementById('rulePosition').value);
-            formData.append('product_count', document.getElementById('ruleProductCount').value);
-            formData.append('priority', document.getElementById('rulePriority').value);
+            formData.append('rule_type', ruleType);
+            formData.append('position', position);
+            formData.append('product_count', productCount);
             formData.append('is_active', document.getElementById('ruleActive').checked ? 1 : 0);
 
             try {

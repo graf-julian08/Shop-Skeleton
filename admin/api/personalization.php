@@ -81,21 +81,34 @@ function handleSaveRule(int $shopId): void
     $position = $_POST['position'] ?? 'product_page';
     $productCount = (int) ($_POST['product_count'] ?? 4);
     $isActive = (int) ($_POST['is_active'] ?? 1);
-    $priority = (int) ($_POST['priority'] ?? 0);
 
     if (empty($name)) {
         echo json_encode(['success' => false, 'error' => 'Name ist erforderlich']);
         return;
     }
 
+    // Validierung: "similar" nicht auf Homepage oder Kategorie
+    if ($ruleType === 'similar' && in_array($position, ['homepage', 'category'])) {
+        echo json_encode(['success' => false, 'error' => '"Ähnliche Produkte" ist auf Homepage/Kategorie nicht möglich']);
+        return;
+    }
+
+    // Validierung: Checkout nicht erlaubt
+    if ($position === 'checkout') {
+        echo json_encode(['success' => false, 'error' => 'Checkout ist keine gültige Position']);
+        return;
+    }
+
+    // Produktanzahl begrenzen (1-12)
+    $productCount = min(max($productCount, 1), 12);
+
     $data = [
         'shop_id' => $shopId,
         'name' => $name,
         'rule_type' => $ruleType,
         'position' => $position,
-        'product_count' => min(max($productCount, 1), 20),
-        'is_active' => $isActive,
-        'priority' => $priority
+        'product_count' => $productCount,
+        'is_active' => $isActive
     ];
 
     if ($id > 0) {
