@@ -1220,7 +1220,8 @@ a:hover {
     border-color: var(--accent);
 }
 
-.filter-search .material-icons {
+.filter-search .material-icons,
+.filter-search .material-symbols-rounded {
     font-size: 18px;
     color: var(--text-muted);
 }

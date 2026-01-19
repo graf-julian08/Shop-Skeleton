@@ -499,12 +499,15 @@ CREATE TABLE product_variants (
     parent_product_id BIGINT UNSIGNED NOT NULL,
     sku VARCHAR(100) NOT NULL,
     name VARCHAR(255),
+    attributes JSON COMMENT 'JSON object storing variant attribute values',
     price DECIMAL(15,4),
     special_price DECIMAL(15,4),
     quantity INT DEFAULT 0,
     weight DECIMAL(10,4),
     is_active TINYINT(1) DEFAULT 1,
+    is_default TINYINT(1) DEFAULT 0 COMMENT 'Marks the default variant for display',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     
     FOREIGN KEY (parent_product_id) REFERENCES products(id) ON DELETE CASCADE,
     UNIQUE KEY uk_variant_sku (sku)
