@@ -46,11 +46,12 @@ class ShopController
             'email' => trim($_POST['email'] ?? $shop['email']),
             'phone' => trim($_POST['phone'] ?? $shop['phone']),
             'default_currency' => $_POST['default_currency'] ?? $shop['default_currency'],
-            'timezone' => $_POST['timezone'] ?? $shop['timezone'],
             'date_format' => $_POST['date_format'] ?? $shop['date_format'],
             'weight_unit' => $_POST['weight_unit'] ?? $shop['weight_unit'],
             'is_active' => isset($_POST['is_active']) ? 1 : 0,
             'maintenance_mode' => isset($_POST['maintenance_mode']) ? 1 : 0,
+            'maintenance_message' => trim($_POST['maintenance_message'] ?? ''),
+            'maintenance_allowed_ips' => trim($_POST['maintenance_allowed_ips'] ?? ''),
         ];
 
         // Update shop

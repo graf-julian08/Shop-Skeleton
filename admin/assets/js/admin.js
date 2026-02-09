@@ -28,6 +28,13 @@ var AdminApp = (function () {
 
             if (!sidebar) return;
 
+            // Load sidebar state from sessionStorage (persists on reload, resets on new session)
+            var savedState = sessionStorage.getItem('sidebar_collapsed');
+            if (savedState === 'true') {
+                sidebar.classList.add('collapsed');
+            }
+            // Default: sidebar is open (no class added)
+
             this.bindDesktopToggle();
             this.bindMobileToggle();
             this.bindMenuGroups();
@@ -42,7 +49,10 @@ var AdminApp = (function () {
                 e.stopPropagation();
                 sidebar.classList.toggle('collapsed');
 
-                // Alle offenen Menügruppen schließen beim Kollabieren
+                // Save to sessionStorage (survives page reload, not new session)
+                sessionStorage.setItem('sidebar_collapsed', sidebar.classList.contains('collapsed'));
+
+                // Close all open menu groups when collapsing
                 if (sidebar.classList.contains('collapsed')) {
                     var openGroups = document.querySelectorAll('.menu-group.open');
                     for (var i = 0; i < openGroups.length; i++) {
@@ -122,26 +132,71 @@ var AdminApp = (function () {
 
     // ========== THEME MODUL ==========
     var Theme = {
+        shopId: 1,
+        apiBase: 'api/settings.php',
+
         init: function () {
             themeToggle = document.getElementById('theme-toggle');
+            this.loadFromDatabase();
             this.updateIcon();
             this.bindToggle();
+            this.listenForSettingsPageChanges();
+        },
+
+        loadFromDatabase: function () {
+            var self = this;
+            // Fetch settings from database
+            fetch(this.apiBase + '?action=get_settings&shop_id=' + this.shopId)
+                .then(function (res) { return res.json(); })
+                .then(function (data) {
+                    if (data.success && data.settings) {
+                        var darkMode = data.settings.dark_mode !== false;
+                        var theme = darkMode ? 'dark' : 'light';
+                        self.setTheme(theme, false); // Don't save back to DB
+                    }
+                })
+                .catch(function (e) {
+                    console.log('Could not load theme from database, using localStorage');
+                });
         },
 
         getCurrentTheme: function () {
             return document.documentElement.getAttribute('data-theme') || 'dark';
         },
 
-        setTheme: function (theme) {
+        setTheme: function (theme, saveToDb) {
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
             this.updateIcon();
+
+            // Sync Settings page checkbox if visible
+            var settingsCheckbox = document.getElementById('settingDarkMode');
+            if (settingsCheckbox) {
+                settingsCheckbox.checked = (theme === 'dark');
+            }
+
+            // Save to database if requested
+            if (saveToDb !== false) {
+                this.saveToDatabase(theme === 'dark');
+            }
         },
 
         toggleTheme: function () {
             var current = this.getCurrentTheme();
             var newTheme = current === 'dark' ? 'light' : 'dark';
-            this.setTheme(newTheme);
+            this.setTheme(newTheme, true); // Save to DB
+        },
+
+        saveToDatabase: function (darkMode) {
+            var formData = new FormData();
+            formData.append('dark_mode', darkMode);
+
+            fetch(this.apiBase + '?action=toggle_dark_mode&shop_id=' + this.shopId, {
+                method: 'POST',
+                body: formData
+            }).catch(function (e) {
+                console.log('Could not save theme to database');
+            });
         },
 
         updateIcon: function () {
@@ -159,6 +214,15 @@ var AdminApp = (function () {
                     self.toggleTheme();
                 });
             }
+        },
+
+        listenForSettingsPageChanges: function () {
+            var self = this;
+            // Listen for custom event from Settings page
+            window.addEventListener('darkModeChanged', function (e) {
+                var darkMode = e.detail.darkMode;
+                self.setTheme(darkMode ? 'dark' : 'light', false);
+            });
         }
     };
 
@@ -355,6 +419,173 @@ var AdminApp = (function () {
         }
     };
 
+    // ========== TRANSLATIONS MODUL ==========
+    var Translations = {
+        // Menu translation map (German to translation key)
+        menuTranslations: {
+            'Dashboard': 'nav.dashboard',
+            'Shop': 'nav.shop',
+            'Allgemein': 'nav.settings',
+            'Design': 'nav.design',
+            'CMS': 'nav.cms',
+            'Navigation': 'nav.navigation',
+            'Lokalisierung': 'nav.localization',
+            'SEO': 'nav.seo',
+            'Personalisierung': 'nav.personalization',
+            'Katalog': 'nav.catalog',
+            'Produkte': 'nav.products',
+            'Kategorien': 'nav.categories',
+            'Attribute': 'nav.attributes',
+            'Bundles': 'nav.bundles',
+            'Konfigurator': 'nav.configurator',
+            'Inventar': 'nav.inventory',
+            'Kunden': 'nav.customers',
+            'Kundenliste': 'nav.customer_list',
+            'Kundengruppen': 'nav.customer_groups',
+            'Kundenhistorie': 'nav.customer_list',
+            'Bestellungen': 'nav.orders',
+            'Fulfillment': 'nav.fulfillment',
+            'Retouren': 'nav.returns',
+            'Stornierungen': 'nav.cancellations',
+            'Commerce': 'nav.commerce',
+            'Checkout': 'nav.commerce',
+            'Warenkörbe': 'nav.commerce',
+            'Preisregeln': 'nav.commerce',
+            'Rabatte': 'nav.coupons',
+            'Steuern': 'nav.taxes',
+            'Versand': 'nav.shipping',
+            'Zahlungen': 'nav.payments',
+            'Abonnements': 'nav.subscriptions',
+            'Digitale Lieferung': 'nav.commerce',
+            'Finanzen': 'nav.finance',
+            'Rechnungen': 'nav.invoices',
+            'Gutschriften': 'nav.credit_notes',
+            'Auszahlungen': 'nav.finance',
+            'Buchhaltung': 'nav.finance',
+            'Abstimmung': 'nav.finance',
+            'Marketing': 'nav.marketing',
+            'Kampagnen': 'nav.marketing',
+            'Gutscheine': 'nav.coupons',
+            'Newsletter': 'nav.newsletter',
+            'Bewertungen': 'nav.reviews',
+            'Reports': 'nav.reports',
+            'Umsatz': 'dashboard.revenue',
+            'Administration': 'nav.administration',
+            'Benutzer': 'nav.users',
+            'Rollen': 'nav.roles',
+            'Berechtigungen': 'nav.roles',
+            'System': 'nav.system',
+            'Einstellungen': 'nav.settings',
+            'Sicherheit': 'nav.security',
+            'Logs': 'nav.logs',
+            'Backups': 'nav.system',
+            'E-Mail': 'nav.email',
+            'Integrationen': 'nav.system',
+            'Entwickler': 'nav.developer',
+            'API': 'nav.api',
+            'Webhooks': 'nav.developer',
+            'Themes': 'nav.themes',
+            'Plugins': 'nav.developer',
+            'Debug': 'nav.developer'
+        },
+
+        init: function () {
+            // Only apply translations if not German
+            if (window.AdminLangCode && window.AdminLangCode !== 'de') {
+                this.applyTranslations();
+            }
+        },
+
+        applyTranslations: function () {
+            var self = this;
+
+            // Translate elements with data-translate attribute
+            var elements = document.querySelectorAll('[data-translate]');
+            for (var i = 0; i < elements.length; i++) {
+                var key = elements[i].getAttribute('data-translate');
+                var translation = window.__(key);
+                if (translation && translation !== key) {
+                    elements[i].textContent = translation;
+                }
+            }
+
+            // Translate sidebar menu items
+            this.translateSidebar();
+
+            // Translate page headers
+            this.translatePageHeaders();
+        },
+
+        translateSidebar: function () {
+            var self = this;
+
+            // Translate menu group headers
+            var menuTexts = document.querySelectorAll('.menu-text');
+            for (var i = 0; i < menuTexts.length; i++) {
+                var text = menuTexts[i].textContent.trim();
+                var key = this.menuTranslations[text];
+                if (key) {
+                    var translation = window.__(key);
+                    if (translation && translation !== key) {
+                        menuTexts[i].textContent = translation;
+                    }
+                }
+            }
+
+            // Translate menu items
+            var menuItems = document.querySelectorAll('.menu-item');
+            for (var i = 0; i < menuItems.length; i++) {
+                var text = menuItems[i].textContent.trim();
+                var key = this.menuTranslations[text];
+                if (key) {
+                    var translation = window.__(key);
+                    if (translation && translation !== key) {
+                        menuItems[i].textContent = translation;
+                    }
+                }
+            }
+
+            // Translate direct menu links
+            var directLinks = document.querySelectorAll('.menu-direct .menu-text');
+            for (var i = 0; i < directLinks.length; i++) {
+                var text = directLinks[i].textContent.trim();
+                var key = this.menuTranslations[text];
+                if (key) {
+                    var translation = window.__(key);
+                    if (translation && translation !== key) {
+                        directLinks[i].textContent = translation;
+                    }
+                }
+            }
+        },
+
+        translatePageHeaders: function () {
+            // Translate common page header elements
+            var pageTitle = document.querySelector('.page-header h1');
+            if (pageTitle) {
+                var translateKey = pageTitle.getAttribute('data-translate');
+                if (translateKey) {
+                    var translation = window.__(translateKey);
+                    if (translation && translation !== translateKey) {
+                        pageTitle.textContent = translation;
+                    }
+                }
+            }
+
+            // Translate page subtitles
+            var pageSubtitle = document.querySelector('.page-subtitle');
+            if (pageSubtitle) {
+                var translateKey = pageSubtitle.getAttribute('data-translate');
+                if (translateKey) {
+                    var translation = window.__(translateKey);
+                    if (translation && translation !== translateKey) {
+                        pageSubtitle.textContent = translation;
+                    }
+                }
+            }
+        }
+    };
+
     // ========== ÖFFENTLICHE API ==========
     return {
         init: function () {
@@ -364,7 +595,11 @@ var AdminApp = (function () {
             Alerts.init();
             Tabs.init();
             Forms.init();
+            Translations.init();
         },
+
+        // Expose Translations module for external use (language switching)
+        Translations: Translations,
 
         // Öffentliche Methoden für externe Nutzung
         toggleTheme: function () {

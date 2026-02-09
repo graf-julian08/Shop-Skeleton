@@ -1,26 +1,26 @@
 <?php /** Katalog - Produkte */ ?>
 <div class="page-header">
     <div class="page-header-content">
-        <h1>Produkte</h1>
-        <p class="page-subtitle">Alle Produkte verwalten</p>
+        <h1><?= __('products.title') ?></h1>
+        <p class="page-subtitle"><?= __('products.subtitle') ?></p>
     </div>
     <div class="page-header-actions">
         <button class="btn" onclick="Products.exportProducts()"><span class="material-symbols-rounded">download</span>
-            Export</button>
+            <?= __('common.export') ?></button>
         <a href="?page=catalog/product_create" class="btn btn-primary"><span class="material-symbols-rounded">add</span>
-            Produkt hinzufügen</a>
+            <?= __('products.add_product') ?></a>
     </div>
 </div>
 
 <div class="tabs" id="productTabs">
-    <button class="tab active" data-tab="alle" onclick="Products.switchTab('alle')">Alle <span
+    <button class="tab active" data-tab="alle" onclick="Products.switchTab('alle')"><?= __('products.tab_all') ?> <span
             class="badge badge-default" id="badgeAll">0</span></button>
-    <button class="tab" data-tab="active" onclick="Products.switchTab('active')">Aktiv <span class="badge badge-success"
-            id="badgeActive">0</span></button>
-    <button class="tab" data-tab="draft" onclick="Products.switchTab('draft')">Entwurf <span class="badge badge-warning"
-            id="badgeDraft">0</span></button>
-    <button class="tab" data-tab="archived" onclick="Products.switchTab('archived')">Archiviert <span
-            class="badge badge-default" id="badgeArchived">0</span></button>
+    <button class="tab" data-tab="active" onclick="Products.switchTab('active')"><?= __('products.tab_active') ?> <span
+            class="badge badge-success" id="badgeActive">0</span></button>
+    <button class="tab" data-tab="draft" onclick="Products.switchTab('draft')"><?= __('products.tab_draft') ?> <span
+            class="badge badge-warning" id="badgeDraft">0</span></button>
+    <button class="tab" data-tab="archived" onclick="Products.switchTab('archived')"><?= __('products.tab_archived') ?>
+        <span class="badge badge-default" id="badgeArchived">0</span></button>
 </div>
 
 <div class="card">
@@ -29,47 +29,47 @@
         <div class="filters">
             <div class="filter-search">
                 <span class="material-symbols-rounded">search</span>
-                <input type="text" id="searchInput" placeholder="Produkte durchsuchen..."
+                <input type="text" id="searchInput" placeholder="<?= __('products.search_placeholder') ?>"
                     oninput="Products.debounceSearch()">
             </div>
             <select class="filter-select" id="categoryFilter" onchange="Products.loadProducts()">
-                <option value="">Alle Kategorien</option>
+                <option value=""><?= __('products.all_categories') ?></option>
             </select>
             <select class="filter-select" id="typeFilter" onchange="Products.loadProducts()">
-                <option value="">Alle Typen</option>
-                <option value="simple">Physisch</option>
-                <option value="digital">Digital</option>
-                <option value="configurable">Konfigurierbar</option>
-                <option value="bundle">Bundle</option>
+                <option value=""><?= __('products.all_types') ?></option>
+                <option value="simple"><?= __('products.type_physical') ?></option>
+                <option value="digital"><?= __('products.type_digital') ?></option>
+                <option value="configurable"><?= __('products.type_configurable') ?></option>
+                <option value="bundle"><?= __('products.type_bundle') ?></option>
             </select>
             <select class="filter-select" id="availabilityFilter" onchange="Products.loadProducts()">
-                <option value="">Verfügbarkeit</option>
-                <option value="in_stock">Auf Lager</option>
-                <option value="out_of_stock">Ausverkauft</option>
-                <option value="low_stock">Niedriger Bestand</option>
+                <option value=""><?= __('products.availability') ?></option>
+                <option value="in_stock"><?= __('products.in_stock') ?></option>
+                <option value="out_of_stock"><?= __('products.out_of_stock') ?></option>
+                <option value="low_stock"><?= __('products.low_stock') ?></option>
             </select>
             <select class="filter-select" id="sortFilter" onchange="Products.loadProducts()">
-                <option value="created_at-DESC">Neueste zuerst</option>
-                <option value="created_at-ASC">Älteste zuerst</option>
-                <option value="name-ASC">Name A-Z</option>
-                <option value="name-DESC">Name Z-A</option>
-                <option value="price-ASC">Preis aufsteigend</option>
-                <option value="price-DESC">Preis absteigend</option>
-                <option value="quantity-DESC">Bestand hoch-niedrig</option>
+                <option value="created_at-DESC"><?= __('products.newest_first') ?></option>
+                <option value="created_at-ASC"><?= __('products.oldest_first') ?></option>
+                <option value="name-ASC"><?= __('products.name_az') ?></option>
+                <option value="name-DESC"><?= __('products.name_za') ?></option>
+                <option value="price-ASC"><?= __('products.price_asc') ?></option>
+                <option value="price-DESC"><?= __('products.price_desc') ?></option>
+                <option value="quantity-DESC"><?= __('products.stock_high_low') ?></option>
             </select>
         </div>
 
         <!-- Bulk Actions -->
         <div class="bulk-actions" id="bulkActions" style="display:none;">
-            <span id="selectedCount">0 ausgewählt</span>
+            <span id="selectedCount">0 <?= __('common.selected') ?></span>
             <button class="btn btn-sm" onclick="Products.bulkAction('activate')"><span
-                    class="material-symbols-rounded">check_circle</span> Aktivieren</button>
+                    class="material-symbols-rounded">check_circle</span> <?= __('products.activate') ?></button>
             <button class="btn btn-sm" onclick="Products.bulkAction('deactivate')"><span
-                    class="material-symbols-rounded">pause_circle</span> Deaktivieren</button>
+                    class="material-symbols-rounded">pause_circle</span> <?= __('products.deactivate') ?></button>
             <button class="btn btn-sm" onclick="Products.bulkAction('archive')"><span
-                    class="material-symbols-rounded">archive</span> Archivieren</button>
+                    class="material-symbols-rounded">archive</span> <?= __('products.archive') ?></button>
             <button class="btn btn-sm btn-danger-ghost" onclick="Products.bulkAction('delete')"><span
-                    class="material-symbols-rounded">delete</span> Löschen</button>
+                    class="material-symbols-rounded">delete</span> <?= __('products.delete') ?></button>
         </div>
 
         <!-- Table -->
@@ -77,25 +77,25 @@
             <thead>
                 <tr>
                     <th><input type="checkbox" id="selectAll" onchange="Products.toggleSelectAll()"></th>
-                    <th>Produkt</th>
-                    <th>Status</th>
-                    <th>Inventar</th>
-                    <th>Typ</th>
+                    <th><?= __('products.column_product') ?></th>
+                    <th><?= __('products.column_status') ?></th>
+                    <th><?= __('products.column_inventory') ?></th>
+                    <th><?= __('products.column_type') ?></th>
                     <th class="price-header">
                         <div class="price-currency-selector">
-                            <span>Preis</span>
+                            <span><?= __('products.column_price') ?></span>
                             <select id="currencySelect" onchange="Products.changeCurrency()" class="currency-dropdown">
-                                <option value="">Laden...</option>
+                                <option value=""><?= __('common.loading') ?></option>
                             </select>
                         </div>
                     </th>
-                    <th>Aktionen</th>
+                    <th><?= __('products.column_actions') ?></th>
                 </tr>
             </thead>
             <tbody id="productsBody">
                 <tr>
-                    <td colspan="7" class="loading-row"><span class="material-symbols-rounded spinning">sync</span> Lade
-                        Produkte...</td>
+                    <td colspan="7" class="loading-row"><span class="material-symbols-rounded spinning">sync</span>
+                        <?= __('products.loading') ?></td>
                 </tr>
             </tbody>
         </table>
@@ -109,15 +109,16 @@
 <div class="modal" id="confirmModal" style="display:none;">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 id="confirmModalTitle">Bestätigung</h3>
+            <h3 id="confirmModalTitle"><?= __('products.confirmation') ?></h3>
             <button class="modal-close" onclick="Products.closeConfirmModal()">&times;</button>
         </div>
         <div class="modal-body">
             <p id="confirmModalMessage"></p>
         </div>
         <div class="modal-footer">
-            <button class="btn" onclick="Products.closeConfirmModal()">Abbrechen</button>
-            <button class="btn btn-danger" id="confirmModalBtn" onclick="Products.confirmAction()">Löschen</button>
+            <button class="btn" onclick="Products.closeConfirmModal()"><?= __('common.cancel') ?></button>
+            <button class="btn btn-danger" id="confirmModalBtn"
+                onclick="Products.confirmAction()"><?= __('common.delete') ?></button>
         </div>
     </div>
 </div>
@@ -126,26 +127,26 @@
 <div class="modal" id="exportModal" style="display:none;">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Produkte exportieren</h3>
+            <h3><?= __('products.export') ?></h3>
             <button class="modal-close" onclick="Products.closeExportModal()">&times;</button>
         </div>
         <div class="modal-body">
-            <p style="margin-bottom:16px;color:var(--text-muted);">Wählen Sie das Export-Format:</p>
+            <p style="margin-bottom:16px;color:var(--text-muted);"><?= __('products.export_format') ?></p>
             <div class="export-options">
                 <label class="export-option" onclick="Products.doExport('json')">
                     <span class="material-symbols-rounded">code</span>
                     <strong>JSON</strong>
-                    <small>Alle Produktdaten als JSON-Datei</small>
+                    <small><?= __('products.export_json') ?></small>
                 </label>
                 <label class="export-option" onclick="Products.doExport('sql')">
                     <span class="material-symbols-rounded">database</span>
                     <strong>SQL</strong>
-                    <small>INSERT-Statements für Datenbank</small>
+                    <small><?= __('products.export_sql') ?></small>
                 </label>
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn" onclick="Products.closeExportModal()">Abbrechen</button>
+            <button class="btn" onclick="Products.closeExportModal()"><?= __('common.cancel') ?></button>
         </div>
     </div>
 </div>
@@ -484,7 +485,7 @@
 
         async loadProducts() {
             const tbody = document.getElementById('productsBody');
-            tbody.innerHTML = '<tr><td colspan="7" class="loading-row"><span class="material-symbols-rounded spinning">sync</span> Lade Produkte...</td></tr>';
+            tbody.innerHTML = `<tr><td colspan="7" class="loading-row"><span class="material-symbols-rounded spinning">sync</span> ${window.__('products.loading')}</td></tr>`;
 
             const search = document.getElementById('searchInput').value;
             const category = document.getElementById('categoryFilter').value;
@@ -524,10 +525,10 @@
                     this.renderProducts(data.products);
                     this.renderPagination(data.pagination);
                 } else {
-                    tbody.innerHTML = '<tr><td colspan="7" class="loading-row">Fehler beim Laden</td></tr>';
+                    tbody.innerHTML = `<tr><td colspan="7" class="loading-row">${window.__('products.error_loading')}</td></tr>`;
                 }
             } catch (e) {
-                tbody.innerHTML = '<tr><td colspan="7" class="loading-row">Fehler: ' + e.message + '</td></tr>';
+                tbody.innerHTML = `<tr><td colspan="7" class="loading-row">${window.__('common.error')}: ` + e.message + '</td></tr>';
             }
         },
 
@@ -535,29 +536,29 @@
             const tbody = document.getElementById('productsBody');
 
             if (products.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="loading-row">Keine Produkte gefunden</td></tr>';
+                tbody.innerHTML = `<tr><td colspan="7" class="loading-row">${window.__('products.no_products_found')}</td></tr>`;
                 return;
             }
 
             const typeLabels = {
-                simple: 'Physisch',
-                digital: 'Digital',
-                configurable: 'Konfigurierbar',
-                bundle: 'Bundle',
-                grouped: 'Gruppiert'
+                simple: window.__('products.type_physical'),
+                digital: window.__('products.type_digital'),
+                configurable: window.__('products.type_configurable'),
+                bundle: window.__('products.type_bundle'),
+                grouped: window.__('products.type_grouped')
             };
 
             const statusBadges = {
-                active: '<span class="badge badge-success">Aktiv</span>',
-                draft: '<span class="badge badge-warning">Entwurf</span>',
-                archived: '<span class="badge badge-default">Archiviert</span>'
+                active: `<span class="badge badge-success">${window.__('products.tab_active')}</span>`,
+                draft: `<span class="badge badge-warning">${window.__('products.tab_draft')}</span>`,
+                archived: `<span class="badge badge-default">${window.__('products.tab_archived')}</span>`
             };
 
             tbody.innerHTML = products.map(p => {
                 const price = parseFloat(p.price).toFixed(2).replace('.', ',');
                 const inventory = p.type === 'digital' && p.manage_stock == 0
-                    ? '∞ Digital'
-                    : (p.manage_stock == 0 ? '∞ Unbegrenzt' : `${p.quantity} auf Lager`);
+                    ? '∞ ' + window.__('products.type_digital')
+                    : (p.manage_stock == 0 ? '∞ ' + window.__('products.unlimited') : `${p.quantity} ${window.__('products.on_stock')}`);
 
                 const inventoryClass = p.manage_stock == 1 && p.quantity == 0 ? 'style="color:var(--error)"' :
                     (p.manage_stock == 1 && p.quantity <= p.low_stock_threshold ? 'style="color:var(--warning)"' : '');
@@ -611,7 +612,7 @@
             }
 
             container.innerHTML = `
-            <span>${pagination.total > 0 ? `${from}-${to} von ${pagination.total} Produkten` : 'Keine Produkte'}</span>
+            <span>${pagination.total > 0 ? `${from}-${to} ${window.__('common.of')} ${pagination.total}` : window.__('products.no_products')}</span>
             <div>${buttons}</div>
         `;
         },
@@ -655,7 +656,7 @@
 
             if (this.selectedIds.length > 0) {
                 bulkActions.style.display = 'flex';
-                selectedCount.textContent = `${this.selectedIds.length} ausgewählt`;
+                selectedCount.textContent = `${this.selectedIds.length} ${window.__('common.selected')}`;
             } else {
                 bulkActions.style.display = 'none';
             }
@@ -666,8 +667,8 @@
 
             if (action === 'delete') {
                 this.showConfirmModal(
-                    'Produkte löschen',
-                    `Möchten Sie ${this.selectedIds.length} Produkte wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.`,
+                    window.__('products.delete'),
+                    window.__('products.confirm_delete_bulk'),
                     async () => {
                         await this.executeBulkAction('delete');
                     }
@@ -697,17 +698,17 @@
                     await this.loadStats();
                     await this.loadProducts();
                 } else {
-                    this.showToast('Fehler: ' + (data.error || 'Unbekannt'), 'error');
+                    this.showToast(window.__('common.error') + ': ' + (data.error || 'Unknown'), 'error');
                 }
             } catch (e) {
-                this.showToast('Fehler: ' + e.message, 'error');
+                this.showToast(window.__('common.error') + ': ' + e.message, 'error');
             }
         },
 
         deleteProduct(id, name) {
             this.showConfirmModal(
-                'Produkt löschen',
-                `Möchten Sie "${name}" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.`,
+                window.__('products.delete'),
+                window.__('products.confirm_delete'),
                 async () => {
                     const formData = new FormData();
                     formData.append('action', 'delete_product');
@@ -719,14 +720,14 @@
                         const data = await res.json();
 
                         if (data.success) {
-                            this.showToast('Produkt gelöscht', 'success');
+                            this.showToast(window.__('products.deleted'), 'success');
                             await this.loadStats();
                             await this.loadProducts();
                         } else {
-                            this.showToast('Fehler: ' + (data.error || 'Unbekannt'), 'error');
+                            this.showToast(window.__('common.error') + ': ' + (data.error || 'Unknown'), 'error');
                         }
                     } catch (e) {
-                        this.showToast('Fehler: ' + e.message, 'error');
+                        this.showToast(window.__('common.error') + ': ' + e.message, 'error');
                     }
                 }
             );
@@ -761,7 +762,7 @@
 
         doExport(format) {
             this.closeExportModal();
-            this.showToast('Export wird vorbereitet...', 'success');
+            this.showToast(window.__('products.export_preparing'), 'success');
             window.location.href = `${this.apiBase}?action=export_products&shop_id=${this.shopId}&format=${format}`;
         },
 

@@ -98,159 +98,154 @@ $features = [
 $menu = [
     // ===== DASHBOARD =====
     'dashboard' => [
-        'label' => 'Dashboard',
+        'label' => 'nav.dashboard',
         'icon' => 'space_dashboard',
         'url' => 'index.php',
     ],
 
     // ===== SHOP =====
     'shop' => [
-        'label' => 'Shop',
+        'label' => 'nav.shop',
         'icon' => 'storefront',
         'items' => [
-            ['label' => 'Allgemein', 'page' => 'shop/general'],
-            ['label' => 'Design', 'page' => 'shop/design'],
-            ['label' => 'CMS', 'page' => 'shop/cms'],
-            ['label' => 'Navigation', 'page' => 'shop/navigation'],
-            ['label' => 'Lokalisierung', 'page' => 'shop/localization'],
-            ['label' => 'SEO', 'page' => 'shop/seo'],
-            ['label' => 'Personalisierung', 'page' => 'shop/personalization'],
+            ['label' => 'nav.general', 'page' => 'shop/general'],
+            ['label' => 'nav.design', 'page' => 'shop/design'],
+            ['label' => 'nav.cms', 'page' => 'shop/cms'],
+            ['label' => 'nav.navigation', 'page' => 'shop/navigation'],
+            ['label' => 'nav.localization', 'page' => 'shop/localization'],
+            ['label' => 'nav.seo', 'page' => 'shop/seo'],
+            ['label' => 'nav.personalization', 'page' => 'shop/personalization'],
         ],
     ],
 
-    // ===== KATALOG =====
-    // HINWEIS: Medien entfernt - werden kontextuell in Produkten/Kategorien/CMS verwaltet
+    // ===== CATALOG =====
     'catalog' => [
-        'label' => 'Katalog',
+        'label' => 'nav.catalog',
         'icon' => 'inventory_2',
         'items' => [
-            ['label' => 'Produkte', 'page' => 'catalog/products'],
-            ['label' => 'Kategorien', 'page' => 'catalog/categories'],
-            ['label' => 'Attribute', 'page' => 'catalog/attributes'],
-            ['label' => 'Bundles', 'page' => 'catalog/bundles'],
-            ['label' => 'Konfigurator', 'page' => 'catalog/configurator'],
-            ['label' => 'Inventar', 'page' => 'catalog/inventory'],
+            ['label' => 'nav.products', 'page' => 'catalog/products'],
+            ['label' => 'nav.categories', 'page' => 'catalog/categories'],
+            ['label' => 'nav.attributes', 'page' => 'catalog/attributes'],
+            ['label' => 'nav.bundles', 'page' => 'catalog/bundles'],
+            ['label' => 'nav.configurator', 'page' => 'catalog/configurator'],
+            ['label' => 'nav.inventory', 'page' => 'catalog/inventory'],
         ],
     ],
 
-    // ===== KUNDEN (nur Shop-Kunden, KEINE Admins) =====
+    // ===== CUSTOMERS =====
     'customers' => [
-        'label' => 'Kunden',
+        'label' => 'nav.customers',
         'icon' => 'group',
         'items' => [
-            ['label' => 'Kundenliste', 'page' => 'customers/customers'],
-            ['label' => 'Kundengruppen', 'page' => 'customers/groups'],
-            ['label' => 'Kundenhistorie', 'page' => 'customers/history'],
+            ['label' => 'nav.customer_list', 'page' => 'customers/customers'],
+            ['label' => 'nav.customer_groups', 'page' => 'customers/groups'],
+            ['label' => 'nav.customer_history', 'page' => 'customers/history'],
         ],
     ],
 
-    // ===== BESTELLUNGEN =====
+    // ===== ORDERS =====
     'orders' => [
-        'label' => 'Bestellungen',
+        'label' => 'nav.orders',
         'icon' => 'receipt_long',
         'items' => [
-            ['label' => 'Bestellungen', 'page' => 'orders/orders'],
-            ['label' => 'Fulfillment', 'page' => 'orders/fulfillment'],
-            ['label' => 'Retouren', 'page' => 'orders/returns'],
-            ['label' => 'Stornierungen', 'page' => 'orders/cancellations'],
+            ['label' => 'nav.orders', 'page' => 'orders/orders'],
+            ['label' => 'nav.fulfillment', 'page' => 'orders/fulfillment'],
+            ['label' => 'nav.returns', 'page' => 'orders/returns'],
+            ['label' => 'nav.cancellations', 'page' => 'orders/cancellations'],
         ],
     ],
 
-    // ===== COMMERCE (logisch gegliedert) =====
+    // ===== COMMERCE =====
     'commerce' => [
-        'label' => 'Commerce',
+        'label' => 'nav.commerce',
         'icon' => 'shopping_bag',
         'items' => [
-            // Checkout Flow
-            ['label' => 'Checkout', 'page' => 'commerce/checkout'],
-            ['label' => 'Warenkörbe', 'page' => 'commerce/carts'],
-            // Preisgestaltung
-            ['label' => 'Preisregeln', 'page' => 'commerce/pricing'],
-            ['label' => 'Rabatte', 'page' => 'commerce/discounts'],
-            ['label' => 'Steuern', 'page' => 'commerce/taxes'],
-            // Versand & Zahlung
-            ['label' => 'Versand', 'page' => 'commerce/shipping'],
-            ['label' => 'Zahlungen', 'page' => 'commerce/payments'],
-            // Erweitert
-            ['label' => 'Abonnements', 'page' => 'commerce/subscriptions'],
-            ['label' => 'Digitale Lieferung', 'page' => 'commerce/digital_delivery'],
+            ['label' => 'nav.checkout', 'page' => 'commerce/checkout'],
+            ['label' => 'nav.carts', 'page' => 'commerce/carts'],
+            ['label' => 'nav.pricing_rules', 'page' => 'commerce/pricing'],
+            ['label' => 'nav.discounts', 'page' => 'commerce/discounts'],
+            ['label' => 'nav.taxes', 'page' => 'commerce/taxes'],
+            ['label' => 'nav.shipping', 'page' => 'commerce/shipping'],
+            ['label' => 'nav.payments', 'page' => 'commerce/payments'],
+            ['label' => 'nav.subscriptions', 'page' => 'commerce/subscriptions'],
+            ['label' => 'nav.digital_delivery', 'page' => 'commerce/digital_delivery'],
         ],
     ],
 
-    // ===== FINANZEN =====
+    // ===== FINANCE =====
     'finance' => [
-        'label' => 'Finanzen',
+        'label' => 'nav.finance',
         'icon' => 'account_balance_wallet',
         'items' => [
-            ['label' => 'Rechnungen', 'page' => 'finance/invoices'],
-            ['label' => 'Gutschriften', 'page' => 'finance/credit_notes'],
-            ['label' => 'Auszahlungen', 'page' => 'finance/payouts'],
-            ['label' => 'Buchhaltung', 'page' => 'finance/accounting'],
-            ['label' => 'Abstimmung', 'page' => 'finance/reconciliation'],
+            ['label' => 'nav.invoices', 'page' => 'finance/invoices'],
+            ['label' => 'nav.credit_notes', 'page' => 'finance/credit_notes'],
+            ['label' => 'nav.payouts', 'page' => 'finance/payouts'],
+            ['label' => 'nav.accounting', 'page' => 'finance/accounting'],
+            ['label' => 'nav.reconciliation', 'page' => 'finance/reconciliation'],
         ],
     ],
 
-    // ===== MARKETING (ohne Analytics - wurde zu Reports verschoben) =====
+    // ===== MARKETING =====
     'marketing' => [
-        'label' => 'Marketing',
+        'label' => 'nav.marketing',
         'icon' => 'campaign',
         'items' => [
-            ['label' => 'Kampagnen', 'page' => 'marketing/campaigns'],
-            ['label' => 'Gutscheine', 'page' => 'marketing/coupons'],
-            ['label' => 'Newsletter', 'page' => 'marketing/newsletter'],
-            ['label' => 'Bewertungen', 'page' => 'marketing/reviews'],
+            ['label' => 'nav.campaigns', 'page' => 'marketing/campaigns'],
+            ['label' => 'nav.coupons', 'page' => 'marketing/coupons'],
+            ['label' => 'nav.newsletter', 'page' => 'marketing/newsletter'],
+            ['label' => 'nav.reviews', 'page' => 'marketing/reviews'],
         ],
     ],
 
-    // ===== REPORTS (NEU - von Marketing getrennt) =====
+    // ===== REPORTS =====
     'reports' => [
-        'label' => 'Reports',
+        'label' => 'nav.reports',
         'icon' => 'analytics',
         'items' => [
-            ['label' => 'Umsatz', 'page' => 'reports/revenue'],
-            ['label' => 'Bestellungen', 'page' => 'reports/orders'],
-            ['label' => 'Kunden', 'page' => 'reports/customers'],
-            ['label' => 'Produkte', 'page' => 'reports/products'],
-            ['label' => 'Marketing', 'page' => 'reports/marketing'],
+            ['label' => 'nav.revenue', 'page' => 'reports/revenue'],
+            ['label' => 'nav.orders', 'page' => 'reports/orders'],
+            ['label' => 'nav.customers', 'page' => 'reports/customers'],
+            ['label' => 'nav.products', 'page' => 'reports/products'],
+            ['label' => 'nav.marketing', 'page' => 'reports/marketing'],
         ],
     ],
 
-    // ===== ADMINISTRATION (NEU - Admin-User strikt getrennt von Kunden) =====
+    // ===== ADMINISTRATION =====
     'administration' => [
-        'label' => 'Administration',
+        'label' => 'nav.administration',
         'icon' => 'admin_panel_settings',
         'items' => [
-            ['label' => 'Benutzer', 'page' => 'administration/users'],
-            ['label' => 'Rollen', 'page' => 'administration/roles'],
-            ['label' => 'Berechtigungen', 'page' => 'administration/permissions'],
+            ['label' => 'nav.users', 'page' => 'administration/users'],
+            ['label' => 'nav.roles', 'page' => 'administration/roles'],
+            ['label' => 'nav.permissions', 'page' => 'administration/permissions'],
         ],
     ],
 
     // ===== SYSTEM =====
     'system' => [
-        'label' => 'System',
+        'label' => 'nav.system',
         'icon' => 'tune',
         'items' => [
-            ['label' => 'Einstellungen', 'page' => 'system/settings'],
-            ['label' => 'Sicherheit', 'page' => 'system/security'],
-            ['label' => 'Logs', 'page' => 'system/logs'],
-            ['label' => 'Backups', 'page' => 'system/backups'],
-            ['label' => 'E-Mail', 'page' => 'system/email'],
-            ['label' => 'Integrationen', 'page' => 'system/integrations'],
+            ['label' => 'nav.settings', 'page' => 'system/settings'],
+            ['label' => 'nav.security', 'page' => 'system/security'],
+            ['label' => 'nav.logs', 'page' => 'system/logs'],
+            ['label' => 'nav.backups', 'page' => 'system/backups'],
+            ['label' => 'nav.email', 'page' => 'system/email'],
+            ['label' => 'nav.integrations', 'page' => 'system/integrations'],
         ],
     ],
 
-    // ===== ENTWICKLER (Advanced) =====
+    // ===== DEVELOPER =====
     'developer' => [
-        'label' => 'Entwickler',
+        'label' => 'nav.developer',
         'icon' => 'terminal',
-        'badge' => 'Advanced', // Visueller Indikator
+        'badge' => 'Advanced',
         'items' => [
-            ['label' => 'API', 'page' => 'developer/api'],
-            ['label' => 'Webhooks', 'page' => 'developer/webhooks'],
-            ['label' => 'Themes', 'page' => 'developer/themes'],
-            ['label' => 'Plugins', 'page' => 'developer/plugins'],
-            ['label' => 'Debug', 'page' => 'developer/debug'],
+            ['label' => 'nav.api', 'page' => 'developer/api'],
+            ['label' => 'nav.webhooks', 'page' => 'developer/webhooks'],
+            ['label' => 'nav.themes', 'page' => 'developer/themes'],
+            ['label' => 'nav.plugins', 'page' => 'developer/plugins'],
+            ['label' => 'nav.debug', 'page' => 'developer/debug'],
         ],
     ],
 ];

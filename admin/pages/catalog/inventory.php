@@ -213,6 +213,33 @@ PROD-002;25
     </div>
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div class="modal-overlay" id="deleteConfirmModal">
+    <div class="modal-content modal-sm">
+        <div class="modal-header">
+            <h2>Lager löschen</h2>
+            <button class="btn btn-icon" onclick="Inventory.closeDeleteModal()">
+                <span class="material-symbols-rounded">close</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div style="text-align: center; padding: 20px 0;">
+                <span class="material-symbols-rounded"
+                    style="font-size: 48px; color: var(--error); margin-bottom: 16px; display: block;">warning</span>
+                <p style="font-size: 16px; margin-bottom: 8px;">Möchten Sie dieses Lager wirklich löschen?</p>
+                <p style="color: var(--text-muted);" id="deleteWarehouseName"></p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" onclick="Inventory.closeDeleteModal()">Abbrechen</button>
+            <button class="btn btn-danger" onclick="Inventory.confirmDeleteWarehouse()"
+                style="background: var(--error); color: white;">
+                <span class="material-symbols-rounded">delete</span> Löschen
+            </button>
+        </div>
+    </div>
+</div>
+
 <!-- Toast Notification -->
 <div class="toast" id="toast"></div>
 
@@ -928,7 +955,7 @@ PROD-002;25
                         <span class="material-symbols-rounded">edit</span>
                     </button>
                     ${!wh.is_default ? `
-                        <button class="btn btn-sm btn-icon" onclick="Inventory.deleteWarehouse(${wh.id})" title="Löschen">
+                        <button class="btn btn-sm btn-icon" onclick="Inventory.deleteWarehouse(${wh.id}, '${this.escapeHtml(wh.name)}')" title="Löschen">
                             <span class="material-symbols-rounded">delete</span>
                         </button>
                     ` : ''}
@@ -993,11 +1020,24 @@ PROD-002;25
             }
         },
 
-        async deleteWarehouse(id) {
-            if (!confirm('Möchten Sie dieses Lager wirklich löschen?')) return;
+        deleteWarehouseId: null,
+
+        deleteWarehouse(id, name) {
+            this.deleteWarehouseId = id;
+            document.getElementById('deleteWarehouseName').textContent = name || 'Lager #' + id;
+            document.getElementById('deleteConfirmModal').classList.add('active');
+        },
+
+        closeDeleteModal() {
+            document.getElementById('deleteConfirmModal').classList.remove('active');
+            this.deleteWarehouseId = null;
+        },
+
+        async confirmDeleteWarehouse() {
+            if (!this.deleteWarehouseId) return;
 
             const formData = new FormData();
-            formData.append('id', id);
+            formData.append('id', this.deleteWarehouseId);
 
             try {
                 const res = await fetch(`api/inventory.php?action=delete_warehouse&shop_id=${this.shopId}`, {
@@ -1015,6 +1055,8 @@ PROD-002;25
             } catch (e) {
                 this.showToast('Verbindungsfehler', 'error');
             }
+
+            this.closeDeleteModal();
         },
 
         // ========================

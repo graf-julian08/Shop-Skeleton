@@ -21,7 +21,6 @@ if (!$shop) {
 }
 
 // Get dropdown options
-$timezones = Shop::getTimezones();
 $dateFormats = Shop::getDateFormats();
 $weightUnits = Shop::getWeightUnits();
 ?>
@@ -119,28 +118,6 @@ $weightUnits = Shop::getWeightUnits();
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label" for="timezone">Zeitzone</label>
-                    <select id="timezone" name="timezone" class="form-select">
-                        <?php foreach ($timezones as $value => $label): ?>
-                            <option value="<?= htmlspecialchars($value) ?>" <?= ($shop['timezone'] ?? 'Europe/Berlin') === $value ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($label) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label" for="date_format">Datumsformat</label>
-                    <select id="date_format" name="date_format" class="form-select">
-                        <?php foreach ($dateFormats as $value => $label): ?>
-                            <option value="<?= htmlspecialchars($value) ?>" <?= ($shop['date_format'] ?? 'DD.MM.YYYY') === $value ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($label) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="form-group">
                     <label class="form-label" for="weight_unit">Gewichtseinheit</label>
                     <select id="weight_unit" name="weight_unit" class="form-select">
                         <?php foreach ($weightUnits as $value => $label): ?>
@@ -151,12 +128,22 @@ $weightUnits = Shop::getWeightUnits();
                     </select>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="form-label" for="date_format">Datumsformat</label>
+                <select id="date_format" name="date_format" class="form-select">
+                    <?php foreach ($dateFormats as $value => $label): ?>
+                        <option value="<?= htmlspecialchars($value) ?>" <?= ($shop['date_format'] ?? 'DD.MM.YYYY') === $value ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($label) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
         </div>
     </div>
 
     <div class="card">
         <div class="card-header">
-            <h3>Shop-Status</h3>
+            <h3>Shop-Status & Wartungsmodus</h3>
         </div>
         <div class="card-body">
             <div class="form-group">
@@ -165,12 +152,26 @@ $weightUnits = Shop::getWeightUnits();
                     <span>Shop ist aktiv und für Kunden sichtbar</span>
                 </label>
             </div>
+            <hr style="border:none;border-top:1px solid var(--border);margin:20px 0;">
             <div class="form-group">
                 <label class="form-checkbox">
-                    <input type="checkbox" name="maintenance_mode" value="1" <?= ($shop['maintenance_mode'] ?? 0) ? 'checked' : '' ?>>
+                    <input type="checkbox" name="maintenance_mode" value="1" id="maintenanceMode"
+                        <?= ($shop['maintenance_mode'] ?? 0) ? 'checked' : '' ?>>
                     <span>Wartungsmodus aktivieren</span>
                 </label>
-                <p class="form-hint">Im Wartungsmodus sehen Besucher eine Wartungsseite</p>
+                <p class="form-hint">Im Wartungsmodus sehen Besucher eine Wartungsseite statt des Shops</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="maintenance_message">Wartungsnachricht</label>
+                <textarea id="maintenance_message" name="maintenance_message" class="form-textarea"
+                    rows="3"><?= htmlspecialchars($shop['maintenance_message'] ?? 'Wir führen gerade Wartungsarbeiten durch. Bitte versuchen Sie es später erneut.') ?></textarea>
+                <p class="form-hint">Diese Nachricht wird Besuchern während des Wartungsmodus angezeigt</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="maintenance_allowed_ips">Erlaubte IPs (Bypass)</label>
+                <textarea id="maintenance_allowed_ips" name="maintenance_allowed_ips" class="form-textarea" rows="2"
+                    placeholder="127.0.0.1&#10;192.168.1.100"><?= htmlspecialchars($shop['maintenance_allowed_ips'] ?? '') ?></textarea>
+                <p class="form-hint">Eine IP pro Zeile - diese IPs haben Zugang trotz Wartungsmodus</p>
             </div>
         </div>
         <div class="card-footer">
