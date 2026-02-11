@@ -114,7 +114,6 @@ $menu = [
             ['label' => 'nav.navigation', 'page' => 'shop/navigation'],
             ['label' => 'nav.localization', 'page' => 'shop/localization'],
             ['label' => 'nav.seo', 'page' => 'shop/seo'],
-            ['label' => 'nav.personalization', 'page' => 'shop/personalization'],
         ],
     ],
 
@@ -126,9 +125,16 @@ $menu = [
             ['label' => 'nav.products', 'page' => 'catalog/products'],
             ['label' => 'nav.categories', 'page' => 'catalog/categories'],
             ['label' => 'nav.attributes', 'page' => 'catalog/attributes'],
-            ['label' => 'nav.bundles', 'page' => 'catalog/bundles'],
-            ['label' => 'nav.configurator', 'page' => 'catalog/configurator'],
             ['label' => 'nav.inventory', 'page' => 'catalog/inventory'],
+        ],
+    ],
+
+    // ===== COLLABORATIONS =====
+    'collaborations' => [
+        'label' => 'nav.collaborations',
+        'icon' => 'handshake',
+        'items' => [
+            ['label' => 'nav.collaborations_list', 'page' => 'collaborations/index'],
         ],
     ],
 
@@ -139,7 +145,6 @@ $menu = [
         'items' => [
             ['label' => 'nav.customer_list', 'page' => 'customers/customers'],
             ['label' => 'nav.customer_groups', 'page' => 'customers/groups'],
-            ['label' => 'nav.customer_history', 'page' => 'customers/history'],
         ],
     ],
 
@@ -151,7 +156,6 @@ $menu = [
             ['label' => 'nav.orders', 'page' => 'orders/orders'],
             ['label' => 'nav.fulfillment', 'page' => 'orders/fulfillment'],
             ['label' => 'nav.returns', 'page' => 'orders/returns'],
-            ['label' => 'nav.cancellations', 'page' => 'orders/cancellations'],
         ],
     ],
 
@@ -161,52 +165,10 @@ $menu = [
         'icon' => 'shopping_bag',
         'items' => [
             ['label' => 'nav.checkout', 'page' => 'commerce/checkout'],
-            ['label' => 'nav.carts', 'page' => 'commerce/carts'],
-            ['label' => 'nav.pricing_rules', 'page' => 'commerce/pricing'],
             ['label' => 'nav.discounts', 'page' => 'commerce/discounts'],
             ['label' => 'nav.taxes', 'page' => 'commerce/taxes'],
             ['label' => 'nav.shipping', 'page' => 'commerce/shipping'],
             ['label' => 'nav.payments', 'page' => 'commerce/payments'],
-            ['label' => 'nav.subscriptions', 'page' => 'commerce/subscriptions'],
-            ['label' => 'nav.digital_delivery', 'page' => 'commerce/digital_delivery'],
-        ],
-    ],
-
-    // ===== FINANCE =====
-    'finance' => [
-        'label' => 'nav.finance',
-        'icon' => 'account_balance_wallet',
-        'items' => [
-            ['label' => 'nav.invoices', 'page' => 'finance/invoices'],
-            ['label' => 'nav.credit_notes', 'page' => 'finance/credit_notes'],
-            ['label' => 'nav.payouts', 'page' => 'finance/payouts'],
-            ['label' => 'nav.accounting', 'page' => 'finance/accounting'],
-            ['label' => 'nav.reconciliation', 'page' => 'finance/reconciliation'],
-        ],
-    ],
-
-    // ===== MARKETING =====
-    'marketing' => [
-        'label' => 'nav.marketing',
-        'icon' => 'campaign',
-        'items' => [
-            ['label' => 'nav.campaigns', 'page' => 'marketing/campaigns'],
-            ['label' => 'nav.coupons', 'page' => 'marketing/coupons'],
-            ['label' => 'nav.newsletter', 'page' => 'marketing/newsletter'],
-            ['label' => 'nav.reviews', 'page' => 'marketing/reviews'],
-        ],
-    ],
-
-    // ===== REPORTS =====
-    'reports' => [
-        'label' => 'nav.reports',
-        'icon' => 'analytics',
-        'items' => [
-            ['label' => 'nav.revenue', 'page' => 'reports/revenue'],
-            ['label' => 'nav.orders', 'page' => 'reports/orders'],
-            ['label' => 'nav.customers', 'page' => 'reports/customers'],
-            ['label' => 'nav.products', 'page' => 'reports/products'],
-            ['label' => 'nav.marketing', 'page' => 'reports/marketing'],
         ],
     ],
 
@@ -217,7 +179,6 @@ $menu = [
         'items' => [
             ['label' => 'nav.users', 'page' => 'administration/users'],
             ['label' => 'nav.roles', 'page' => 'administration/roles'],
-            ['label' => 'nav.permissions', 'page' => 'administration/permissions'],
         ],
     ],
 
@@ -227,25 +188,8 @@ $menu = [
         'icon' => 'tune',
         'items' => [
             ['label' => 'nav.settings', 'page' => 'system/settings'],
-            ['label' => 'nav.security', 'page' => 'system/security'],
-            ['label' => 'nav.logs', 'page' => 'system/logs'],
-            ['label' => 'nav.backups', 'page' => 'system/backups'],
             ['label' => 'nav.email', 'page' => 'system/email'],
             ['label' => 'nav.integrations', 'page' => 'system/integrations'],
-        ],
-    ],
-
-    // ===== DEVELOPER =====
-    'developer' => [
-        'label' => 'nav.developer',
-        'icon' => 'terminal',
-        'badge' => 'Advanced',
-        'items' => [
-            ['label' => 'nav.api', 'page' => 'developer/api'],
-            ['label' => 'nav.webhooks', 'page' => 'developer/webhooks'],
-            ['label' => 'nav.themes', 'page' => 'developer/themes'],
-            ['label' => 'nav.plugins', 'page' => 'developer/plugins'],
-            ['label' => 'nav.debug', 'page' => 'developer/debug'],
         ],
     ],
 ];
@@ -340,6 +284,10 @@ $additionalPages = [
 
     // Geo-Location
     'shop/geo_popup_editor',
+
+    // Collaborations
+    'collaborations/create',
+    'collaborations/edit',
 ];
 
 $allowedPages = array_merge($allowedPages, $additionalPages);
