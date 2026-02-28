@@ -57,7 +57,7 @@ $database = [
     'host' => 'localhost',
     'database' => 'bagisto_admin',
     'username' => 'root',
-    'password' => 'Nailuj18@NESA08',
+    'password' => '',
     'charset' => 'utf8mb4',
 ];
 
@@ -138,15 +138,6 @@ $menu = [
         ],
     ],
 
-    // ===== CUSTOMERS =====
-    'customers' => [
-        'label' => 'nav.customers',
-        'icon' => 'group',
-        'items' => [
-            ['label' => 'nav.customer_list', 'page' => 'customers/customers'],
-            ['label' => 'nav.customer_groups', 'page' => 'customers/groups'],
-        ],
-    ],
 
     // ===== ORDERS =====
     'orders' => [
@@ -154,8 +145,6 @@ $menu = [
         'icon' => 'receipt_long',
         'items' => [
             ['label' => 'nav.orders', 'page' => 'orders/orders'],
-            ['label' => 'nav.fulfillment', 'page' => 'orders/fulfillment'],
-            ['label' => 'nav.returns', 'page' => 'orders/returns'],
         ],
     ],
 
@@ -166,21 +155,10 @@ $menu = [
         'items' => [
             ['label' => 'nav.checkout', 'page' => 'commerce/checkout'],
             ['label' => 'nav.discounts', 'page' => 'commerce/discounts'],
-            ['label' => 'nav.taxes', 'page' => 'commerce/taxes'],
-            ['label' => 'nav.shipping', 'page' => 'commerce/shipping'],
             ['label' => 'nav.payments', 'page' => 'commerce/payments'],
         ],
     ],
 
-    // ===== ADMINISTRATION =====
-    'administration' => [
-        'label' => 'nav.administration',
-        'icon' => 'admin_panel_settings',
-        'items' => [
-            ['label' => 'nav.users', 'page' => 'administration/users'],
-            ['label' => 'nav.roles', 'page' => 'administration/roles'],
-        ],
-    ],
 
     // ===== SYSTEM =====
     'system' => [

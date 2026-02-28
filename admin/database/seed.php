@@ -14,13 +14,13 @@ $config = [
     'db_host' => getenv('DB_HOST') ?: 'localhost',
     'db_name' => getenv('DB_NAME') ?: 'bagisto_admin',
     'db_user' => getenv('DB_USER') ?: 'root',
-    'db_pass' => getenv('DB_PASS') ?: 'Nailuj18@NESA08',
-    
+    'db_pass' => getenv('DB_PASS') ?: '',
+
     // Default admin user (CHANGE THESE!)
     'admin_name' => getenv('ADMIN_NAME') ?: 'Administrator',
     'admin_email' => getenv('ADMIN_EMAIL') ?: 'admin@example.com',
     'admin_password' => getenv('ADMIN_PASSWORD') ?: 'admin123',
-    
+
     // Default shop
     'shop_name' => getenv('SHOP_NAME') ?: 'Mein Online Shop',
     'shop_email' => getenv('SHOP_EMAIL') ?: 'info@meinshop.de',
@@ -41,14 +41,14 @@ echo "=== Database Seeder ===\n\n";
 
 try {
     Database::beginTransaction();
-    
+
     // =========================================
     // 1. Create Default Shop
     // =========================================
     echo "1. Creating default shop...\n";
-    
+
     $existingShop = Database::fetch("SELECT id FROM shops WHERE code = 'default'");
-    
+
     if (!$existingShop) {
         $shopId = Database::insert('shops', [
             'code' => 'default',
@@ -67,18 +67,19 @@ try {
             'maintenance_mode' => 0,
         ]);
         echo "   ✓ Created shop (ID: {$shopId})\n";
-    } else {
+    }
+    else {
         $shopId = $existingShop['id'];
         echo "   ⊘ Shop already exists (ID: {$shopId})\n";
     }
-    
+
     // =========================================
     // 2. Create Shop Design
     // =========================================
     echo "2. Creating shop design settings...\n";
-    
+
     $existingDesign = Database::fetch("SELECT id FROM shop_design WHERE shop_id = ?", [$shopId]);
-    
+
     if (!$existingDesign) {
         Database::insert('shop_design', [
             'shop_id' => $shopId,
@@ -94,17 +95,18 @@ try {
             'footer_style' => 'columns',
         ]);
         echo "   ✓ Created shop design\n";
-    } else {
+    }
+    else {
         echo "   ⊘ Shop design already exists\n";
     }
-    
+
     // =========================================
     // 3. Create Default Language
     // =========================================
     echo "3. Creating default language...\n";
-    
+
     $existingLang = Database::fetch("SELECT id FROM languages WHERE shop_id = ? AND code = 'de_DE'", [$shopId]);
-    
+
     if (!$existingLang) {
         Database::insert('languages', [
             'shop_id' => $shopId,
@@ -115,17 +117,18 @@ try {
             'is_active' => 1,
         ]);
         echo "   ✓ Created German language\n";
-    } else {
+    }
+    else {
         echo "   ⊘ Language already exists\n";
     }
-    
+
     // =========================================
     // 4. Create Default Currency
     // =========================================
     echo "4. Creating default currency...\n";
-    
+
     $existingCurrency = Database::fetch("SELECT id FROM currencies WHERE shop_id = ? AND code = 'EUR'", [$shopId]);
-    
+
     if (!$existingCurrency) {
         Database::insert('currencies', [
             'shop_id' => $shopId,
@@ -141,19 +144,20 @@ try {
             'is_active' => 1,
         ]);
         echo "   ✓ Created EUR currency\n";
-    } else {
+    }
+    else {
         echo "   ⊘ Currency already exists\n";
     }
-    
+
     // =========================================
     // 5. Create Permissions
     // =========================================
     echo "5. Creating permissions...\n";
-    
+
     $permissions = [
         // Dashboard
         ['dashboard.view', 'View Dashboard', 'dashboard'],
-        
+
         // Catalog
         ['products.view', 'View Products', 'catalog'],
         ['products.create', 'Create Products', 'catalog'],
@@ -165,60 +169,60 @@ try {
         ['categories.delete', 'Delete Categories', 'catalog'],
         ['attributes.view', 'View Attributes', 'catalog'],
         ['attributes.manage', 'Manage Attributes', 'catalog'],
-        
+
         // Customers
         ['customers.view', 'View Customers', 'customers'],
         ['customers.create', 'Create Customers', 'customers'],
         ['customers.edit', 'Edit Customers', 'customers'],
         ['customers.delete', 'Delete Customers', 'customers'],
-        
+
         // Orders
         ['orders.view', 'View Orders', 'orders'],
         ['orders.edit', 'Edit Orders', 'orders'],
         ['orders.cancel', 'Cancel Orders', 'orders'],
         ['orders.refund', 'Process Refunds', 'orders'],
-        
+
         // Commerce
         ['commerce.settings', 'Manage Commerce Settings', 'commerce'],
         ['discounts.manage', 'Manage Discounts', 'commerce'],
         ['taxes.manage', 'Manage Taxes', 'commerce'],
         ['shipping.manage', 'Manage Shipping', 'commerce'],
         ['payments.manage', 'Manage Payments', 'commerce'],
-        
+
         // Finance
         ['finance.view', 'View Finance', 'finance'],
         ['invoices.manage', 'Manage Invoices', 'finance'],
-        
+
         // Marketing
         ['marketing.view', 'View Marketing', 'marketing'],
         ['campaigns.manage', 'Manage Campaigns', 'marketing'],
         ['reviews.moderate', 'Moderate Reviews', 'marketing'],
-        
+
         // Reports
         ['reports.view', 'View Reports', 'reports'],
-        
+
         // Administration
         ['admin_users.view', 'View Admin Users', 'administration'],
         ['admin_users.manage', 'Manage Admin Users', 'administration'],
         ['roles.manage', 'Manage Roles', 'administration'],
-        
+
         // Shop Settings
         ['shop.settings', 'Manage Shop Settings', 'shop'],
         ['shop.design', 'Manage Design', 'shop'],
         ['cms.manage', 'Manage CMS Pages', 'shop'],
         ['navigation.manage', 'Manage Navigation', 'shop'],
-        
+
         // System
         ['system.settings', 'System Settings', 'system'],
         ['system.logs', 'View Logs', 'system'],
         ['system.backups', 'Manage Backups', 'system'],
-        
+
         // Developer
         ['developer.api', 'API Access', 'developer'],
         ['developer.webhooks', 'Manage Webhooks', 'developer'],
         ['developer.debug', 'Debug Mode', 'developer'],
     ];
-    
+
     $permissionIds = [];
     foreach ($permissions as $perm) {
         $existing = Database::fetch("SELECT id FROM permissions WHERE key_name = ?", [$perm[0]]);
@@ -229,20 +233,21 @@ try {
                 'permission_group' => $perm[2],
             ]);
             $permissionIds[$perm[0]] = $permId;
-        } else {
+        }
+        else {
             $permissionIds[$perm[0]] = $existing['id'];
         }
     }
     echo "   ✓ Created/verified " . count($permissions) . " permissions\n";
-    
+
     // =========================================
     // 6. Create Default Roles
     // =========================================
     echo "6. Creating default roles...\n";
-    
+
     // Super Admin Role
     $existingSuperAdmin = Database::fetch("SELECT id FROM roles WHERE shop_id = ? AND name = 'Super Admin'", [$shopId]);
-    
+
     if (!$existingSuperAdmin) {
         $superAdminRoleId = Database::insert('roles', [
             'shop_id' => $shopId,
@@ -250,7 +255,7 @@ try {
             'description' => 'Full access to all features',
             'is_system' => 1,
         ]);
-        
+
         // Assign all permissions to Super Admin
         foreach ($permissionIds as $permId) {
             Database::insert('role_permissions', [
@@ -259,14 +264,15 @@ try {
             ]);
         }
         echo "   ✓ Created Super Admin role with all permissions\n";
-    } else {
+    }
+    else {
         $superAdminRoleId = $existingSuperAdmin['id'];
         echo "   ⊘ Super Admin role already exists\n";
     }
-    
+
     // Editor Role
     $existingEditor = Database::fetch("SELECT id FROM roles WHERE shop_id = ? AND name = 'Editor'", [$shopId]);
-    
+
     if (!$existingEditor) {
         $editorRoleId = Database::insert('roles', [
             'shop_id' => $shopId,
@@ -274,10 +280,10 @@ try {
             'description' => 'Can manage catalog and content',
             'is_system' => 0,
         ]);
-        
-        $editorPerms = ['dashboard.view', 'products.view', 'products.create', 'products.edit', 
-                        'categories.view', 'categories.create', 'categories.edit',
-                        'cms.manage', 'navigation.manage'];
+
+        $editorPerms = ['dashboard.view', 'products.view', 'products.create', 'products.edit',
+            'categories.view', 'categories.create', 'categories.edit',
+            'cms.manage', 'navigation.manage'];
         foreach ($editorPerms as $permKey) {
             if (isset($permissionIds[$permKey])) {
                 Database::insert('role_permissions', [
@@ -287,17 +293,18 @@ try {
             }
         }
         echo "   ✓ Created Editor role\n";
-    } else {
+    }
+    else {
         echo "   ⊘ Editor role already exists\n";
     }
-    
+
     // =========================================
     // 7. Create Default Admin User
     // =========================================
     echo "7. Creating default admin user...\n";
-    
+
     $existingAdmin = Database::fetch("SELECT id FROM admin_users WHERE email = ?", [$config['admin_email']]);
-    
+
     if (!$existingAdmin) {
         $adminId = Database::insert('admin_users', [
             'shop_id' => $shopId,
@@ -309,29 +316,30 @@ try {
             'timezone' => 'Europe/Berlin',
             'dark_mode' => 0,
         ]);
-        
+
         // Assign Super Admin role
         Database::insert('admin_user_roles', [
             'admin_user_id' => $adminId,
             'role_id' => $superAdminRoleId,
         ]);
-        
+
         echo "   ✓ Created admin user: {$config['admin_email']}\n";
-    } else {
+    }
+    else {
         echo "   ⊘ Admin user already exists\n";
     }
-    
+
     // =========================================
     // 8. Create Default Customer Groups
     // =========================================
     echo "8. Creating default customer groups...\n";
-    
+
     $groups = [
         ['general', 'Allgemein', 'Standard-Kundengruppe', 0.00, 1],
         ['wholesale', 'Großhandel', 'Großhandelskunden mit Rabatt', 10.00, 0],
         ['vip', 'VIP', 'VIP-Kunden mit Sonderkonditionen', 15.00, 0],
     ];
-    
+
     foreach ($groups as $group) {
         $existing = Database::fetch("SELECT id FROM customer_groups WHERE shop_id = ? AND code = ?", [$shopId, $group[0]]);
         if (!$existing) {
@@ -346,18 +354,18 @@ try {
         }
     }
     echo "   ✓ Created/verified " . count($groups) . " customer groups\n";
-    
+
     // =========================================
     // 9. Create Default Tax Classes
     // =========================================
     echo "9. Creating default tax classes...\n";
-    
+
     $taxClasses = [
         ['standard', 'Standard', 1],
         ['reduced', 'Ermäßigt', 0],
         ['zero', 'Steuerfrei', 0],
     ];
-    
+
     foreach ($taxClasses as $tc) {
         $existing = Database::fetch("SELECT id FROM tax_classes WHERE shop_id = ? AND code = ?", [$shopId, $tc[0]]);
         if (!$existing) {
@@ -370,18 +378,18 @@ try {
         }
     }
     echo "   ✓ Created/verified " . count($taxClasses) . " tax classes\n";
-    
+
     // =========================================
     // 10. Create Default Navigation Menus
     // =========================================
     echo "10. Creating default navigation menus...\n";
-    
+
     $menus = [
         ['main', 'Hauptmenü'],
         ['footer', 'Footer-Menü'],
         ['mobile', 'Mobile Navigation'],
     ];
-    
+
     foreach ($menus as $menu) {
         $existing = Database::fetch("SELECT id FROM navigation_menus WHERE shop_id = ? AND code = ?", [$shopId, $menu[0]]);
         if (!$existing) {
@@ -394,16 +402,18 @@ try {
         }
     }
     echo "   ✓ Created/verified " . count($menus) . " navigation menus\n";
-    
+
     Database::commit();
-    
+
     echo "\n=== Seeding Complete ===\n";
     echo "\nLogin credentials:\n";
     echo "  Email:    {$config['admin_email']}\n";
     echo "  Password: {$config['admin_password']}\n";
     echo "\n⚠️  Please change the password after first login!\n";
-    
-} catch (Exception $e) {
+
+
+}
+catch (Exception $e) {
     Database::rollback();
     echo "\n❌ Error: " . $e->getMessage() . "\n";
     exit(1);
