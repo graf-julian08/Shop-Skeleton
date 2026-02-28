@@ -57,7 +57,7 @@ $database = [
     'host' => 'localhost',
     'database' => 'bagisto_admin',
     'username' => 'root',
-    'password' => 'Nailuj18@NESA08',
+    'password' => '',
     'charset' => 'utf8mb4',
 ];
 
