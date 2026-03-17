@@ -22,6 +22,7 @@ Database::configure($database);
 require_once __DIR__ . '/includes/system_settings.php';
 applySystemSettings();
 
+require_once __DIR__ . '/includes/TwoFactorAuth.php';
 require_once __DIR__ . '/includes/Auth.php';
 require_once __DIR__ . '/includes/FileUpload.php';
 require_once __DIR__ . '/includes/components.php';
@@ -57,9 +58,21 @@ if ($currentPage === 'logout') {
     exit;
 }
 
+// 2FA Verify page is rendered standalone (no layout, like login)
+if ($currentPage === 'two_factor_verify') {
+    require_once __DIR__ . '/pages/two_factor_verify.php';
+    exit;
+}
+
 // Live Preview is rendered standalone (no layout)
 if ($currentPage === 'shop/preview_header') {
     require_once __DIR__ . '/pages/shop/preview_header.php';
+    exit;
+}
+
+// If 2FA is pending, redirect to verify page
+if (Auth::is2faPending()) {
+    header('Location: ?page=two_factor_verify');
     exit;
 }
 
@@ -319,7 +332,7 @@ $adminLangCode = getAdminLangCode();
                                 <a href="?page=system/settings" class="dropdown-item compact"><span
                                         class="material-symbols-rounded">settings</span>
                                     <?= __('header.settings') ?></a>
-                                <a href="?page=system/security" class="dropdown-item compact"><span
+                                <a href="?page=two_factor_setup" class="dropdown-item compact"><span
                                         class="material-symbols-rounded">security</span>
                                     <?= __('header.security') ?></a>
                             </div>

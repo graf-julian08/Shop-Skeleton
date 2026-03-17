@@ -247,6 +247,8 @@ $additionalPages = [
     // Authentication
     'login',
     'logout',
+    'two_factor_verify',
+    'two_factor_setup',
 
     // CMS Pages
     'shop/cms_create',

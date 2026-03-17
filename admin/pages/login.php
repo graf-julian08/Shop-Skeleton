@@ -9,12 +9,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($email) || empty($password)) {
         $error = 'Bitte E-Mail und Passwort eingeben.';
-    } elseif (Auth::attempt($email, $password)) {
-        // Redirect to dashboard on successful login
-        header('Location: ?page=dashboard');
-        exit;
     } else {
-        $error = 'Ungültige Anmeldedaten.';
+        $result = Auth::attempt($email, $password);
+        
+        if ($result === '2fa_required') {
+            // 2FA is enabled — redirect to verification page
+            header('Location: ?page=two_factor_verify');
+            exit;
+        } elseif ($result === 'success') {
+            // No 2FA — redirect to dashboard
+            header('Location: ?page=dashboard');
+            exit;
+        } else {
+            $error = 'Ungültige Anmeldedaten.';
+        }
     }
 }
 

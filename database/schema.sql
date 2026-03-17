@@ -156,6 +156,7 @@ CREATE TABLE admin_users (
     email_verified_at TIMESTAMP NULL,
     two_factor_enabled TINYINT(1) DEFAULT 0,
     two_factor_secret VARCHAR(255),
+    two_factor_recovery_codes TEXT,
     
     -- Session tracking
     last_login_at TIMESTAMP NULL,
