@@ -1,15 +1,15 @@
-<?php
+﻿<?php
 /**
  * ============================================
  * ADMIN PANEL - HAUPTEINSTIEG (INDEX)
  * ============================================
- * Enthält:
+ * EnthÃ¤lt:
  * - Gesamtes Layout
  * - Sidebar
  * - Topbar
  * - Dashboard-Content (als Default)
  * 
- * Nutzt router.php NUR für Subpages
+ * Nutzt router.php NUR fÃ¼r Subpages
  * ============================================
  */
 require_once __DIR__ . '/config.php';
@@ -23,6 +23,7 @@ require_once __DIR__ . '/includes/system_settings.php';
 applySystemSettings();
 
 require_once __DIR__ . '/includes/Auth.php';
+require_once __DIR__ . '/includes/RateLimiter.php';
 require_once __DIR__ . '/includes/FileUpload.php';
 require_once __DIR__ . '/includes/components.php';
 require_once __DIR__ . '/includes/translations.php';
@@ -40,7 +41,7 @@ require_once __DIR__ . '/controllers/ShopController.php';
 require_once __DIR__ . '/controllers/CmsController.php';
 require_once __DIR__ . '/controllers/NavigationController.php';
 
-// Initialize Auth (starts session, loads user)
+// Initialize Auth (starts session, loads user if fully verified)
 Auth::init();
 
 $currentPage = currentPage();
@@ -63,8 +64,8 @@ if ($currentPage === 'shop/preview_header') {
     exit;
 }
 
-// All other pages require authentication
-if (!Auth::check()) {
+// All other pages require FULL authentication (password + 2FA verified)
+if (!Auth::isFullyVerified()) {
     header('Location: ?page=login');
     exit;
 }
@@ -334,10 +335,10 @@ $adminLangCode = getAdminLangCode();
             <!-- Content Area -->
             <div class="content-area">
                 <?php
-                // Router aufrufen - gibt 'dashboard', 'error' oder 'page' zurück
+                // Router aufrufen - gibt 'dashboard', 'error' oder 'page' zurÃ¼ck
                 $result = routePage();
 
-                // Dashboard Content (wenn Router null zurückgibt)
+                // Dashboard Content (wenn Router null zurÃ¼ckgibt)
                 if ($result === 'dashboard'):
                     ?>
                     <!-- ===== DASHBOARD ===== -->
@@ -743,7 +744,7 @@ $adminLangCode = getAdminLangCode();
                             apiBase: 'api/dashboard.php',
                             shopId: 1,
                             displayCurrency: null,
-                            currencySymbol: '€',
+                            currencySymbol: 'â‚¬',
 
                             async init() {
                                 await this.loadCurrencies();
@@ -765,7 +766,7 @@ $adminLangCode = getAdminLangCode();
                                             `<option value="${c.code}" ${c.code === defaultCode ? 'selected' : ''}>${c.code} (${c.symbol})</option>`
                                         ).join('');
                                         this.displayCurrency = defaultCode;
-                                        this.currencySymbol = data.available_currencies.find(c => c.code === defaultCode)?.symbol || '€';
+                                        this.currencySymbol = data.available_currencies.find(c => c.code === defaultCode)?.symbol || 'â‚¬';
                                         select.value = defaultCode;
                                     }
                                 } catch (e) { console.error('Error loading currencies:', e); }

@@ -18,7 +18,7 @@ $config = [
 
     // Default admin user (CHANGE THESE!)
     'admin_name' => getenv('ADMIN_NAME') ?: 'Administrator',
-    'admin_email' => getenv('ADMIN_EMAIL') ?: 'admin@example.com',
+    'admin_email' => getenv('ADMIN_EMAIL') ?: 'nevio.weishaupt@ksb-sg.ch',
     'admin_password' => getenv('ADMIN_PASSWORD') ?: 'admin123',
 
     // Default shop
@@ -309,7 +309,7 @@ try {
         $adminId = Database::insert('admin_users', [
             'shop_id' => $shopId,
             'email' => $config['admin_email'],
-            'password' => password_hash($config['admin_password'], PASSWORD_DEFAULT),
+            'password' => password_hash($config['admin_password'], PASSWORD_BCRYPT, ['cost' => 12]),
             'name' => $config['admin_name'],
             'is_active' => 1,
             'locale' => 'de_DE',
